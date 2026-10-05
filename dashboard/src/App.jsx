@@ -3,11 +3,13 @@ import { ErrorCard, Skeleton, useDashboard, useTheme } from "./data.jsx";
 import Dataset from "./components/Dataset.jsx";
 import Explainability from "./components/Explainability.jsx";
 import Performance from "./components/Performance.jsx";
+import Predict from "./components/Predict.jsx";
 import Threshold from "./components/Threshold.jsx";
 import Training from "./components/Training.jsx";
 import { fmt, StatTile } from "./components/ui.jsx";
 
 const TABS = [
+  { id: "predict", label: "Predict", Component: Predict },
   { id: "performance", label: "Performance", Component: Performance },
   { id: "training", label: "Training", Component: Training },
   { id: "threshold", label: "Threshold", Component: Threshold },
@@ -94,7 +96,7 @@ function StatRow({ data }) {
 
 export default function App() {
   const { status, data, error } = useDashboard();
-  const [active, setActive] = useState("performance");
+  const [active, setActive] = useState(TABS[0].id);
 
   if (status === "loading") return <Skeleton />;
   if (status === "error") return <ErrorCard error={error} />;
@@ -141,8 +143,9 @@ export default function App() {
 
       <footer className="mt-10 text-xs" style={{ color: "var(--text-muted)" }}>
         Every number on this page comes from <code>dashboard/public/data/dashboard.json</code>,
-        generated from <code>reports/</code> by <code>src/export_dashboard_data.py</code>. The
-        dashboard runs no model — live prediction stays in the Streamlit app.
+        generated from <code>reports/</code> by <code>src/export_dashboard_data.py</code>. Only the
+        Predict tab runs the model, through the local API in <code>src/serve_api.py</code>;
+        everything else is static and needs nothing running.
       </footer>
     </div>
   );

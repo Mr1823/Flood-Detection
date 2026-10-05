@@ -42,6 +42,32 @@ npm run dev            # http://localhost:5173
 retrain is one command. The exporter fails loudly if a source report is missing and
 names the script that produces it.
 
+### Live prediction in the dashboard
+
+Five of the six tabs are static and need nothing running. The **Predict** tab is the
+exception: it uploads an image to a small local API that runs the deployed model and
+returns the probability and a Grad-CAM overlay. Start it in a second terminal:
+
+```bash
+cd dashboard
+npm run api            # http://127.0.0.1:8000, proxied as /api by the dev server
+```
+
+`src/serve_api.py` reuses `dataset.load_for_model`, `gradcam.explain` and
+`model.load_trained_model` - the same functions the Streamlit app and `evaluate.py`
+use - so a prediction in the dashboard and a prediction in Streamlit are the same
+computation. Checked against the saved pipeline values, the API agrees to 7e-07.
+
+The **Threshold** tab also has a slider that recomputes precision, recall, the
+confusion matrix, floods missed and false alarms from the saved per-image test
+probabilities. That one needs no API: it re-counts saved numbers in the browser and is
+exact. The deployed threshold is unchanged by it.
+
+| Script | What it does |
+|---|---|
+| `npm run api` | local prediction service for the Predict tab |
+| `npm run dev:all` | the API and the dev server together |
+
 | Script | What it does |
 |---|---|
 | `npm run data` | rebuild `dashboard.json` from `reports/` |

@@ -7,7 +7,9 @@
     "data": "cd .. && .venv/bin/python src/export_dashboard_data.py",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "api": "cd .. && .venv/bin/python src/serve_api.py",
+    "dev:all": "npm run api & npm run dev"
   },
   "dependencies": {
     "react": "^19.2.0",

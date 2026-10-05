@@ -13,5 +13,7 @@ scikit-learn==1.9.1
 pillow==12.3.0
 opencv-python==4.11.0.86
 streamlit==1.60.0             # web demo app (app.py)
+fastapi==0.120.4             # local prediction API for the React dashboard (src/serve_api.py)
+python-multipart==0.0.32      # FastAPI needs this to accept the uploaded image
 protobuf==4.25.9              # pinned: a plain streamlit install upgrades protobuf to 7.x,
                               # which TensorFlow 2.16 cannot import

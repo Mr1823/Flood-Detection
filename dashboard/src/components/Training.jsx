@@ -39,7 +39,7 @@ function MetricChart({ metric, title, rows, finetuneStart, zeroBased, unit }) {
       subtitle={`Deployed run · y-axis ${fmt.num(domain[0], 2)}–${fmt.num(domain[1], 2)}${
         zeroBased ? "" : ", not zero-based"
       }`}
-      caption={`Train and validation ${metric} per epoch. The dashed rule marks where fine-tuning begins (epoch ${finetuneStart}). The y-axis runs ${fmt.num(
+      caption={`Train and validation ${metric === "auc" ? "AUC" : metric} per epoch. The dashed rule marks where fine-tuning begins (epoch ${finetuneStart}). The y-axis runs ${fmt.num(
         domain[0],
         2,
       )}–${fmt.num(domain[1], 2)}${zeroBased ? "." : ", zoomed so the differences are readable — it does not start at zero."}`}

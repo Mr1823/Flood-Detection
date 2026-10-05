@@ -48,7 +48,7 @@ function ModelComparison({ comparison, seeds, note }) {
     <ChartCard
       title="Frozen vs fine-tuned"
       subtitle={`Test set, mean ± std over ${seeds.length} seeds (${seeds.join(", ")})`}
-      caption={`Bars start at zero. Error bars are ±1 sample standard deviation across the ${seeds.length} seeds. ${note}`}
+      caption={`Bars start at zero. Error bars are ±1 ${note.replace(/;.*/, "")}. Accuracy, precision and recall use the default 0.5 threshold, so this compares the two training variants rather than the deployed operating point.`}
       table={{
         columns: [
           { key: "metric", label: "Metric" },
@@ -91,7 +91,9 @@ function ModelComparison({ comparison, seeds, note }) {
               ) : null
             }
           />
-          <Bar dataKey="frozen" fill={VARIANT_COLOR.frozen} radius={[4, 4, 0, 0]} maxBarSize={46}>
+          <Bar dataKey="frozen" fill={VARIANT_COLOR.frozen} radius={[4, 4, 0, 0]} maxBarSize={46}
+            isAnimationActive={false}
+          >
             <ErrorBar dataKey="frozen_std" width={5} strokeWidth={1.5} stroke="var(--text-secondary)" />
           </Bar>
           <Bar
@@ -99,6 +101,7 @@ function ModelComparison({ comparison, seeds, note }) {
             fill={VARIANT_COLOR.finetuned}
             radius={[4, 4, 0, 0]}
             maxBarSize={46}
+            isAnimationActive={false}
           >
             <ErrorBar
               dataKey="finetuned_std"

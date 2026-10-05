@@ -105,7 +105,9 @@ function DeletionTest({ gradcam }) {
               ) : null
             }
           />
-          <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={34}>
+          <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={34}
+            isAnimationActive={false}
+          >
             {data.map((row) => (
               <Cell key={row.label} fill={row.color} />
             ))}

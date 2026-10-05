@@ -10,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { axisProps, ChartCard, ChartLegend, fmt, gridProps, SectionIntro, TooltipBox } from "./ui.jsx";
+import ThresholdExplorer from "./ThresholdExplorer.jsx";
 
 const LINES = [
   { key: "precision", color: "var(--series-1)" },
@@ -134,6 +135,8 @@ export default function Threshold({ data }) {
         {data.meta.threshold_rationale}
       </SectionIntro>
 
+      <ThresholdExplorer data={data} />
+
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -168,7 +171,10 @@ export default function Threshold({ data }) {
                 )}, recall ${fmt.prob(chosen.recall, 3)}, F1 ${fmt.prob(chosen.f1, 3)}`
               : undefined
           }
-          caption={`Precision, recall and F1 across the swept thresholds on the validation split. ${data.meta.threshold_rationale}`}
+          caption={`Precision, recall and F1 across every swept threshold on the validation split. The rule that picked ${fmt.num(
+            threshold,
+            2,
+          )} is stated above; the vertical line is where it landed.`}
         />
         {showTest ? (
           <SweepChart

@@ -131,7 +131,9 @@ function DatasetValidation({ audit }) {
               fontSize: 11,
             }}
           />
-          <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={34}>
+          <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={34}
+            isAnimationActive={false}
+          >
             {data.map((row) => (
               <Cell key={row.name} fill={row.color} />
             ))}
@@ -222,6 +224,7 @@ function SplitComposition({ meta }) {
             maxBarSize={72}
             stroke="var(--surface-1)"
             strokeWidth={2}
+            isAnimationActive={false}
           />
           <Bar
             dataKey={positive}
@@ -231,6 +234,7 @@ function SplitComposition({ meta }) {
             maxBarSize={72}
             stroke="var(--surface-1)"
             strokeWidth={2}
+            isAnimationActive={false}
           />
         </BarChart>
       </ResponsiveContainer>
