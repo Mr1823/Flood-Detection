@@ -1,0 +1,94 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- Jupyter / IPython ----
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ---- Testing / tooling caches ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# ---- Environment / secrets ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- OS / editor ----
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# ---- Datasets ----
+# data/ IS tracked (curated train/val/test splits, ~133 MB, no file over 5 MB).
+# Only the upstream raw downloads are excluded: the archives blow past GitHub's
+# 100 MB per-file limit, and aider_raw/ can be re-extracted from AIDER.zip.
+aider_raw/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Keep large derived caches out even though data/ is tracked
+data/**/*.npy
+data/**/*.npz
+data/**/*.tfrecord
+data/cache/
+
+# ---- Model weights / exports ----
+# models/ IS tracked (~204 MB, incl. the seed_42/43/44 checkpoints). Largest
+# single file is 24 MB, under GitHub's 100 MB per-file cap, so no Git LFS needed.
+# Stray weights dumped at the repo root are still excluded:
+/*.keras
+/*.h5
+/*.hdf5
+/*.tflite
+/*.onnx
+/*.pt
+/*.pth
+/*.pb
+/*.ckpt
+checkpoints/
+
+# ---- Training artifacts ----
+logs/
+runs/
+tensorboard/
+wandb/
+mlruns/
+*.log
+# ...but keep the committed training/Grad-CAM run logs
+!reports/*.log
+!reports/**/*.log
+
+# ---- Streamlit / Gradio caches ----
+.streamlit/secrets.toml
+flagged/

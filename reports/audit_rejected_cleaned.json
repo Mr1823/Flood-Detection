@@ -1,0 +1,143 @@
+{
+  "target": "/private/tmp/claude-501/-Users-blackheart-Projects--Department-Project--DP-Mini-Project-/e1c42629-47c6-4164-bf67-7f78e6a3017f/scratchpad/rejected_cleaned_v2",
+  "mode": "split",
+  "sampling": "all images",
+  "seed": 42,
+  "audited_at": "2026-10-04T20:46:33",
+  "fingerprint": "c81c95efe358204cf0a2f8056e7584382383cc5320ef8ff6bf3478b0da7271bb",
+  "n_images": 381,
+  "classes": [
+    "flooding",
+    "normal"
+  ],
+  "counts": {
+    "test": {
+      "flooding": 43,
+      "normal": 19
+    },
+    "train": {
+      "flooding": 168,
+      "normal": 89
+    },
+    "valid": {
+      "flooding": 42,
+      "normal": 20
+    }
+  },
+  "size_leak": {
+    "balanced_accuracy": 64.0625,
+    "plain_accuracy": 75.8530183727034,
+    "block_pct": 70.34120734908136,
+    "blocks": [
+      {
+        "images": 253,
+        "size": [
+          512,
+          384
+        ],
+        "class": "flooding",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          1300,
+          956
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          1280,
+          720
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          225,
+          225
+        ],
+        "class": "normal",
+        "share": 1.0
+      }
+    ]
+  },
+  "duplicates": {
+    "exact_extra_copies": 0,
+    "near_pairs": 3,
+    "across_splits": 2,
+    "across_classes": 0
+  },
+  "quality": {
+    "unreadable": 0,
+    "unloadable": 0,
+    "smaller_than_input": 0,
+    "smaller_by_class": {
+      "flooding": 0,
+      "normal": 0
+    },
+    "colour_modes": {
+      "RGB": 370,
+      "P": 9,
+      "RGBA": 1,
+      "L": 1
+    }
+  },
+  "source_leak": {
+    "note": "lower bound on the shortcut, not a measurement of it; no pass line",
+    "squash": {
+      "images": 381,
+      "balanced_accuracy": 77.63257918552038,
+      "single_feature": {
+        "blur": 68.77918552036199,
+        "contrast": 53.17285067873303,
+        "colour_spread": 54.55022624434389
+      }
+    },
+    "centre_crop": {
+      "images": 381,
+      "balanced_accuracy": 78.19004524886878,
+      "single_feature": {
+        "blur": 65.98733031674209,
+        "contrast": 48.727300150829564,
+        "colour_spread": 51.79969834087481
+      }
+    },
+    "balanced_accuracy": 77.63257918552038
+  },
+  "filenames": {
+    "flooding": {
+      "example": "image_211.jpg",
+      "top_prefix": "image_",
+      "share": 1.0
+    },
+    "normal": {
+      "example": "Sampling-area-urban-suburban-rural-locations-and-nearby-traffic-roads.png",
+      "top_prefix": "ia_100",
+      "share": 0.40625
+    }
+  },
+  "issues": [
+    {
+      "severity": "WARN",
+      "check": "counts",
+      "message": "Only 381 images - expect unstable results; report mean +/- std over several seeds, not a single number."
+    },
+    {
+      "severity": "FAIL",
+      "check": "size_leak",
+      "message": "70% of images sit in single-class size blocks; dimensions alone score 64% balanced accuracy."
+    },
+    {
+      "severity": "FAIL",
+      "check": "duplicates",
+      "message": "2 photo(s) appear in more than one split - the test score would be inflated. Re-run src/split_data.py."
+    }
+  ],
+  "verdict": "FAIL"
+}

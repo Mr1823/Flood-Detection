@@ -1,0 +1,19 @@
+{
+  "threshold": 0.3,
+  "rationale": "Lowest threshold whose VALIDATION precision is still >= 0.85 (validation precision 0.859, recall 1.000). A missed flood costs lives while a false alarm costs an inspection, so recall is maximised subject to the precision floor. Chosen on validation data only.",
+  "selected_on": "validation",
+  "min_precision": 0.85,
+  "validation": {
+    "threshold": 0.3,
+    "tp": 79,
+    "fp": 13,
+    "tn": 137,
+    "fn": 0,
+    "precision": 0.8586956521739131,
+    "recall": 1.0,
+    "f1": 0.9239766081871346,
+    "specificity": 0.9133333333333333,
+    "accuracy": 0.9432314410480349,
+    "balanced_accuracy": 0.9566666666666667
+  }
+}

@@ -1,0 +1,40 @@
+2026-10-04 20:38:11.432709: W tensorflow/core/framework/local_rendezvous.cc:404] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2026-10-04 20:38:12.444900: W tensorflow/core/framework/local_rendezvous.cc:404] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+[config] TensorFlow 2.16.2
+[config] Physical devices: CPU (/physical_device:CPU:0), GPU (/physical_device:GPU:0)
+[config] Seed = 42  (python random, numpy, tensorflow)
+[data] train: 1068 files belonging to 2 classes
+[data] val: 229 files belonging to 2 classes
+[data] test: 228 files belonging to 2 classes
+[model] Device check passed: GPU graph mode matches the CPU reference (max difference 2.4e-06 on 32 images)
+
+Chosen flood threshold: 0.30  (saved to threshold.json)
+  Why: Lowest threshold whose VALIDATION precision is still >= 0.85 (validation precision 0.859, recall 1.000). A missed flood costs lives while a false alarm costs an inspection, so recall is maximised subject to the precision floor. Chosen on validation data only.
+  For comparison, recall >= 0.95 on validation needs threshold 0.90, at validation precision 1.000 (test: precision 0.961, recall 0.949).
+
+Confusion matrix with default 0.5 threshold (test set; rows = actual, columns = predicted):
+                      predicted no_flood   predicted flood
+     actual no_flood                 142                 8
+        actual flood                   1                77
+
+Confusion matrix with tuned threshold 0.30 (test set; rows = actual, columns = predicted):
+                      predicted no_flood   predicted flood
+     actual no_flood                 138                12
+        actual flood                   1                77
+
+Classification report (test set, tuned threshold):
+              precision    recall  f1-score   support
+
+    no_flood      0.993     0.920     0.955       150
+       flood      0.865     0.987     0.922        78
+
+    accuracy                          0.943       228
+   macro avg      0.929     0.954     0.939       228
+weighted avg      0.949     0.943     0.944       228
+
+ROC AUC: 0.9955   (average precision 0.9932)
+
+False negatives at threshold 0.30 - floods the system would miss (1 of 78 test floods):
+  data/test/flood/flood_image0384.jpg  0.0139
+
+[evaluate] Saved metrics.json, threshold sweeps, figures and false_negatives.csv in reports/ and threshold.json in models/

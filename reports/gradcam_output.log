@@ -1,0 +1,13 @@
+[config] TensorFlow 2.16.2
+[config] Physical devices: CPU (/physical_device:CPU:0), GPU (/physical_device:GPU:0)
+[config] Seed = 42  (python random, numpy, tensorflow)
+[gradcam] 228 test images explained (layer Conv_1, threshold 0.30)
+[gradcam] all_test_images  n=228  mean attention  26.2%  median   8.4%  above 50%:  26.3% of images
+[gradcam] true_flood       n= 78  mean attention  62.0%  median  63.5%  above 50%:  76.9% of images
+[gradcam] true_no_flood    n=150  mean attention   7.5%  median   4.8%  above 50%:   0.0% of images
+[gradcam] predicted_flood  n= 89  mean attention  58.3%  median  61.3%  above 50%:  67.4% of images
+[gradcam] misclassified    n= 13  mean attention  27.4%  median  28.2%  above 50%:   0.0% of images
+[gradcam] Deletion test on 77 detected floods (grey out 25% of pixels): mean P(flood) 0.992 -> 0.848 with the MOST-attended pixels removed, 0.987 with the LEAST-attended removed; still classed flood: 88.3% vs 100.0%
+[gradcam] WARNING: attention covers 59.1% of the image (> 50%) - the model is reacting to the whole scene rather than localising water, which suggests background or source cues.
+[gradcam] WARNING: attention covers 64.6% of the image (> 50%) - the model is reacting to the whole scene rather than localising water, which suggests background or source cues.
+[gradcam] Saved reports/gradcam_grid.png and gradcam_stats.json

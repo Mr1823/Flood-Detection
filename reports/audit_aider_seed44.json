@@ -1,0 +1,149 @@
+{
+  "target": "aider_raw/AIDER",
+  "mode": "pool",
+  "sampling": "class-balanced random sample, seed 44, from flood 526, no_flood 4390",
+  "seed": 44,
+  "audited_at": "2026-10-04T20:47:50",
+  "fingerprint": "fab669e9d86d186fe3f64e40ca5bf7c9f73f574a1d5edefe296c50e69d8c02c7",
+  "n_images": 1052,
+  "classes": [
+    "flood",
+    "no_flood"
+  ],
+  "counts": {
+    "all": {
+      "flood": 526,
+      "no_flood": 526
+    }
+  },
+  "size_leak": {
+    "balanced_accuracy": 94.48669201520912,
+    "plain_accuracy": 94.48669201520913,
+    "block_pct": 26.520912547528518,
+    "blocks": [
+      {
+        "images": 125,
+        "size": [
+          399,
+          360
+        ],
+        "class": "no_flood",
+        "share": 1.0
+      },
+      {
+        "images": 118,
+        "size": [
+          400,
+          360
+        ],
+        "class": "no_flood",
+        "share": 1.0
+      },
+      {
+        "images": 13,
+        "size": [
+          512,
+          512
+        ],
+        "class": "no_flood",
+        "share": 1.0
+      },
+      {
+        "images": 8,
+        "size": [
+          720,
+          480
+        ],
+        "class": "no_flood",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          500,
+          500
+        ],
+        "class": "flood",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          230,
+          230
+        ],
+        "class": "flood",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          200,
+          200
+        ],
+        "class": "flood",
+        "share": 1.0
+      }
+    ]
+  },
+  "duplicates": {
+    "exact_extra_copies": 0,
+    "near_pairs": 5,
+    "across_splits": 0,
+    "across_classes": 0
+  },
+  "quality": {
+    "unreadable": 0,
+    "unloadable": 0,
+    "smaller_than_input": 29,
+    "smaller_by_class": {
+      "flood": 17,
+      "no_flood": 12
+    },
+    "colour_modes": {
+      "RGB": 1052
+    }
+  },
+  "source_leak": {
+    "note": "lower bound on the shortcut, not a measurement of it; no pass line",
+    "squash": {
+      "images": 1052,
+      "balanced_accuracy": 65.97394429469901,
+      "single_feature": {
+        "blur": 55.509433962264154,
+        "contrast": 55.709793351302785,
+        "colour_spread": 56.939802336028755
+      }
+    },
+    "centre_crop": {
+      "images": 1052,
+      "balanced_accuracy": 65.696316262354,
+      "single_feature": {
+        "blur": 52.663971248876905,
+        "contrast": 54.758310871518425,
+        "colour_spread": 57.419586702605564
+      }
+    },
+    "balanced_accuracy": 65.97394429469901
+  },
+  "filenames": {
+    "flood": {
+      "example": "flood_image0001.jpg",
+      "top_prefix": "flood_",
+      "share": 1.0
+    },
+    "no_flood": {
+      "example": "normal_image0006.jpg",
+      "top_prefix": "normal",
+      "share": 1.0
+    }
+  },
+  "issues": [
+    {
+      "severity": "FAIL",
+      "check": "size_leak",
+      "message": "27% of images sit in single-class size blocks; dimensions alone score 94% balanced accuracy."
+    }
+  ],
+  "verdict": "FAIL"
+}

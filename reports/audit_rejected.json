@@ -1,0 +1,189 @@
+{
+  "target": "data/rejected",
+  "mode": "split",
+  "sampling": "all images",
+  "seed": 42,
+  "audited_at": "2026-10-04T20:46:18",
+  "fingerprint": "34f2cf45afd057d5f6ec4ccadc396727044d826681f3de996d71f5d82db014a0",
+  "n_images": 475,
+  "classes": [
+    "flooding",
+    "normal"
+  ],
+  "counts": {
+    "test": {
+      "flooding": 43,
+      "normal": 29
+    },
+    "train": {
+      "flooding": 168,
+      "normal": 154
+    },
+    "valid": {
+      "flooding": 42,
+      "normal": 39
+    }
+  },
+  "size_leak": {
+    "balanced_accuracy": 73.64864864864865,
+    "plain_accuracy": 75.36842105263158,
+    "block_pct": 67.36842105263158,
+    "blocks": [
+      {
+        "images": 253,
+        "size": [
+          512,
+          384
+        ],
+        "class": "flooding",
+        "share": 1.0
+      },
+      {
+        "images": 21,
+        "size": [
+          128,
+          128
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 19,
+        "size": [
+          100,
+          100
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 7,
+        "size": [
+          259,
+          194
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          1300,
+          956
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          1280,
+          720
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          275,
+          183
+        ],
+        "class": "normal",
+        "share": 1.0
+      },
+      {
+        "images": 5,
+        "size": [
+          225,
+          225
+        ],
+        "class": "normal",
+        "share": 1.0
+      }
+    ]
+  },
+  "duplicates": {
+    "exact_extra_copies": 1,
+    "near_pairs": 5,
+    "across_splits": 4,
+    "across_classes": 0
+  },
+  "quality": {
+    "unreadable": 0,
+    "unloadable": 1,
+    "smaller_than_input": 93,
+    "smaller_by_class": {
+      "flooding": 0,
+      "normal": 93
+    },
+    "colour_modes": {
+      "RGB": 438,
+      "P": 13,
+      "RGBA": 23,
+      "L": 1
+    }
+  },
+  "source_leak": {
+    "note": "lower bound on the shortcut, not a measurement of it; no pass line",
+    "squash": {
+      "images": 474,
+      "balanced_accuracy": 74.64212715389186,
+      "single_feature": {
+        "blur": 66.72067736185383,
+        "contrast": 51.92061794414735,
+        "colour_spread": 50.09180035650624
+      }
+    },
+    "centre_crop": {
+      "images": 474,
+      "balanced_accuracy": 74.4460487225193,
+      "single_feature": {
+        "blur": 64.76476530005942,
+        "contrast": 50.93309566250742,
+        "colour_spread": 51.744682115270344
+      }
+    },
+    "balanced_accuracy": 74.64212715389186
+  },
+  "filenames": {
+    "flooding": {
+      "example": "image_211.jpg",
+      "top_prefix": "image_",
+      "share": 1.0
+    },
+    "normal": {
+      "example": "Sampling-area-urban-suburban-rural-locations-and-nearby-traffic-roads.png",
+      "top_prefix": "ia_100",
+      "share": 0.23423423423423423
+    }
+  },
+  "issues": [
+    {
+      "severity": "WARN",
+      "check": "counts",
+      "message": "Only 475 images - expect unstable results; report mean +/- std over several seeds, not a single number."
+    },
+    {
+      "severity": "FAIL",
+      "check": "size_leak",
+      "message": "67% of images sit in single-class size blocks; dimensions alone score 74% balanced accuracy."
+    },
+    {
+      "severity": "FAIL",
+      "check": "duplicates",
+      "message": "4 photo(s) appear in more than one split - the test score would be inflated. Re-run src/split_data.py."
+    },
+    {
+      "severity": "FAIL",
+      "check": "quality",
+      "message": "1 file(s) training cannot read - delete or re-split."
+    },
+    {
+      "severity": "WARN",
+      "check": "quality",
+      "message": "93 images are smaller than 224px and will be blurry when upscaled (by class: {'flooding': 0, 'normal': 93})."
+    }
+  ],
+  "verdict": "FAIL"
+}

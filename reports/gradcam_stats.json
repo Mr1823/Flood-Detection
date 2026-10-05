@@ -1,0 +1,52 @@
+{
+  "layer": "Conv_1",
+  "threshold": 0.3,
+  "cut": 0.5,
+  "warn_above_pct": 50.0,
+  "all_test_images": {
+    "n": 228,
+    "mean_attention_pct": 26.15543287627552,
+    "median_attention_pct": 8.428332270408163,
+    "share_above_warn_pct": 26.31578947368421
+  },
+  "true_flood": {
+    "n": 78,
+    "mean_attention_pct": 62.04319768772895,
+    "median_attention_pct": 63.47855548469387,
+    "share_above_warn_pct": 76.92307692307693
+  },
+  "true_no_flood": {
+    "n": 150,
+    "mean_attention_pct": 7.493795174319727,
+    "median_attention_pct": 4.776187818877551,
+    "share_above_warn_pct": 0.0
+  },
+  "predicted_flood": {
+    "n": 89,
+    "mean_attention_pct": 58.32185314434763,
+    "median_attention_pct": 61.332110969387756,
+    "share_above_warn_pct": 67.41573033707866
+  },
+  "correct": {
+    "n": 215,
+    "mean_attention_pct": 26.082505858448034,
+    "median_attention_pct": 7.447783801020408,
+    "share_above_warn_pct": 27.906976744186046
+  },
+  "misclassified": {
+    "n": 13,
+    "mean_attention_pct": 27.36153355572999,
+    "median_attention_pct": 28.212691326530614,
+    "share_above_warn_pct": 0.0
+  },
+  "deletion_test_detected_floods": {
+    "images": 77,
+    "deleted_share": 0.25,
+    "fill": "neutral grey (127.5)",
+    "mean_p_flood_original": 0.992195586879532,
+    "mean_p_flood_most_attended_deleted": 0.8478752970695496,
+    "mean_p_flood_least_attended_deleted": 0.9871971011161804,
+    "still_flood_after_most_attended_deleted_pct": 88.31168831168831,
+    "still_flood_after_least_attended_deleted_pct": 100.0
+  }
+}

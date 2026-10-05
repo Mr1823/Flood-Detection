@@ -1,0 +1,290 @@
+{
+  "model": "models/best_model.keras",
+  "test_images": 228,
+  "test_floods": 78,
+  "val_images": 229,
+  "val_floods": 79,
+  "threshold": {
+    "value": 0.3,
+    "selected_on": "validation",
+    "rationale": "Lowest threshold whose VALIDATION precision is still >= 0.85 (validation precision 0.859, recall 1.000). A missed flood costs lives while a false alarm costs an inspection, so recall is maximised subject to the precision floor. Chosen on validation data only.",
+    "min_precision": 0.85,
+    "validation_at_threshold": {
+      "threshold": 0.3,
+      "tp": 79,
+      "fp": 13,
+      "tn": 137,
+      "fn": 0,
+      "precision": 0.8586956521739131,
+      "recall": 1.0,
+      "f1": 0.9239766081871346,
+      "specificity": 0.9133333333333333,
+      "accuracy": 0.9432314410480349,
+      "balanced_accuracy": 0.9566666666666667
+    },
+    "target_recall": 0.95,
+    "target_recall_threshold_val": {
+      "threshold": 0.9,
+      "tp": 77,
+      "fp": 0,
+      "tn": 150,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.9746835443037974,
+      "f1": 0.9871794871794872,
+      "specificity": 1.0,
+      "accuracy": 0.9912663755458515,
+      "balanced_accuracy": 0.9873417721518987
+    },
+    "target_recall_threshold_test": {
+      "threshold": 0.9,
+      "tp": 74,
+      "fp": 3,
+      "tn": 147,
+      "fn": 4,
+      "precision": 0.961038961038961,
+      "recall": 0.9487179487179487,
+      "f1": 0.9548387096774195,
+      "specificity": 0.98,
+      "accuracy": 0.9692982456140351,
+      "balanced_accuracy": 0.9643589743589743
+    }
+  },
+  "test_at_default_0.5": {
+    "threshold": 0.5,
+    "tp": 77,
+    "fp": 8,
+    "tn": 142,
+    "fn": 1,
+    "precision": 0.9058823529411765,
+    "recall": 0.9871794871794872,
+    "f1": 0.9447852760736197,
+    "specificity": 0.9466666666666667,
+    "accuracy": 0.9605263157894737,
+    "balanced_accuracy": 0.966923076923077
+  },
+  "test_at_tuned_threshold": {
+    "threshold": 0.3,
+    "tp": 77,
+    "fp": 12,
+    "tn": 138,
+    "fn": 1,
+    "precision": 0.8651685393258427,
+    "recall": 0.9871794871794872,
+    "f1": 0.9221556886227544,
+    "specificity": 0.92,
+    "accuracy": 0.9429824561403509,
+    "balanced_accuracy": 0.9535897435897436
+  },
+  "test_roc_auc": 0.9954700854700854,
+  "test_average_precision": 0.9932291276454328,
+  "misclassified_at_tuned_threshold": 13,
+  "false_negatives": [
+    {
+      "file": "data/test/flood/flood_image0384.jpg",
+      "p_flood": 0.0139
+    }
+  ],
+  "confusion_matrix_note": "rows = actual, columns = predicted, order no_flood then flood",
+  "seed_summary": {
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "selected_variant": "finetuned",
+    "deployed_seed": 43,
+    "per_seed_choice": {
+      "42": "finetuned",
+      "43": "finetuned",
+      "44": "frozen"
+    },
+    "std": "sample standard deviation (ddof=1) across seeds",
+    "threshold": "accuracy, precision and recall use the default 0.5 threshold",
+    "variants": {
+      "frozen": {
+        "val_loss": {
+          "mean": 0.13751542319854101,
+          "std": 0.10171217472792034,
+          "values": [
+            0.25496214628219604,
+            0.07905074208974838,
+            0.07853338122367859
+          ]
+        },
+        "val_accuracy": {
+          "mean": 0.9388646086057028,
+          "std": 0.04921147242635781,
+          "values": [
+            0.8820960521697998,
+            0.9650654792785645,
+            0.9694322943687439
+          ]
+        },
+        "val_auc": {
+          "mean": 0.9965823094050089,
+          "std": 0.0009649360253716558,
+          "values": [
+            0.9962025284767151,
+            0.9958650469779968,
+            0.9976793527603149
+          ]
+        },
+        "test_accuracy": {
+          "mean": 0.9473684231440226,
+          "std": 0.04942731619609761,
+          "values": [
+            0.890350878238678,
+            0.9780701994895935,
+            0.9736841917037964
+          ]
+        },
+        "test_auc": {
+          "mean": 0.9893874923388163,
+          "std": 0.0004489021811331559,
+          "values": [
+            0.9894016981124878,
+            0.9898291230201721,
+            0.9889316558837891
+          ]
+        },
+        "test_precision": {
+          "mean": 0.8878086606661478,
+          "std": 0.10923474008970754,
+          "values": [
+            0.7623762488365173,
+            0.9620253443717957,
+            0.9390243887901306
+          ]
+        },
+        "test_recall": {
+          "mean": 0.9829059640566508,
+          "std": 0.00740190888050407,
+          "values": [
+            0.9871794581413269,
+            0.9743589758872986,
+            0.9871794581413269
+          ]
+        }
+      },
+      "finetuned": {
+        "val_loss": {
+          "mean": 0.06615668038527171,
+          "std": 0.005693906066358037,
+          "values": [
+            0.061383992433547974,
+            0.07245922833681107,
+            0.06462682038545609
+          ]
+        },
+        "val_accuracy": {
+          "mean": 0.9737991094589233,
+          "std": 0.004366815090179443,
+          "values": [
+            0.9737991094589233,
+            0.9694322943687439,
+            0.9781659245491028
+          ]
+        },
+        "val_auc": {
+          "mean": 0.9981715480486552,
+          "std": 0.0008567718314397565,
+          "values": [
+            0.9977636337280273,
+            0.9991560578346252,
+            0.997594952583313
+          ]
+        },
+        "test_accuracy": {
+          "mean": 0.9649122754732767,
+          "std": 0.004385977983508482,
+          "values": [
+            0.9649122953414917,
+            0.9605262875556946,
+            0.969298243522644
+          ]
+        },
+        "test_auc": {
+          "mean": 0.9933902819951376,
+          "std": 0.002827373743008078,
+          "values": [
+            0.9945298433303833,
+            0.9954700469970703,
+            0.990170955657959
+          ]
+        },
+        "test_precision": {
+          "mean": 0.9309164881706238,
+          "std": 0.022477495085743572,
+          "values": [
+            0.9375,
+            0.9058823585510254,
+            0.949367105960846
+          ]
+        },
+        "test_recall": {
+          "mean": 0.9700854420661926,
+          "std": 0.014803852173765848,
+          "values": [
+            0.9615384340286255,
+            0.9871794581413269,
+            0.9615384340286255
+          ]
+        }
+      }
+    }
+  },
+  "history": {
+    "seed": 43,
+    "variants": {
+      "frozen": {
+        "val_loss": 0.07905074208974838,
+        "val_accuracy": 0.9650654792785645,
+        "val_precision": 0.949367105960846,
+        "val_recall": 0.949367105960846,
+        "val_auc": 0.9958650469779968,
+        "test_loss": 0.0939294844865799,
+        "test_accuracy": 0.9780701994895935,
+        "test_precision": 0.9620253443717957,
+        "test_recall": 0.9743589758872986,
+        "test_auc": 0.9898291230201721,
+        "epochs_run": 15,
+        "best_epoch": 15,
+        "stopped_early": false,
+        "train_seconds": 151.0
+      },
+      "finetuned": {
+        "val_loss": 0.07245922833681107,
+        "val_accuracy": 0.9694322943687439,
+        "val_precision": 0.9285714030265808,
+        "val_recall": 0.9873417615890503,
+        "val_auc": 0.9991560578346252,
+        "test_loss": 0.11742530763149261,
+        "test_accuracy": 0.9605262875556946,
+        "test_precision": 0.9058823585510254,
+        "test_recall": 0.9871794581413269,
+        "test_auc": 0.9954700469970703,
+        "epochs_run": 9,
+        "best_epoch": 19,
+        "stopped_early": true,
+        "train_seconds": 110.7
+      }
+    },
+    "selected": "finetuned",
+    "deployed": {
+      "variant": "finetuned",
+      "seed": 43,
+      "rule": "variant with the higher mean validation AUC across seeds; weights from its run with the highest validation AUC"
+    },
+    "audit": {
+      "status": "current",
+      "verdict": "FAIL",
+      "audited_at": "2026-10-04T19:59:59",
+      "fingerprint": "5a3a30669ccf26d1d24077af490e7f88fa09c35f0e41fa5fb38ef11280b4b424",
+      "source_leak": {
+        "squash": 68.11428571428571,
+        "centre_crop": 69.45238095238095
+      }
+    }
+  }
+}
