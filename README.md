@@ -25,6 +25,35 @@ chosen on the validation set. Test set: 228 images (78 flood, 150 no_flood).
 Source: `reports/metrics.json`. Across three seeds the fine-tuned variant reaches
 test accuracy 0.9649 ± 0.0044 at threshold 0.5 (`reports/seed_summary.json`).
 
+## Results dashboard (React, localhost)
+
+A static, read-only analytics view over the numbers already in `reports/`. It runs no
+model - live prediction stays in the Streamlit app - so it only ever shows values the
+pipeline has already produced.
+
+```bash
+cd dashboard
+npm install            # once
+npm run data           # regenerate dashboard/public/data/dashboard.json from reports/
+npm run dev            # http://localhost:5173
+```
+
+`npm run data` runs `src/export_dashboard_data.py`, so refreshing the dashboard after a
+retrain is one command. The exporter fails loudly if a source report is missing and
+names the script that produces it.
+
+| Script | What it does |
+|---|---|
+| `npm run data` | rebuild `dashboard.json` from `reports/` |
+| `npm run dev` | dev server on http://localhost:5173 |
+| `npm run build` | production build into `dashboard/dist` |
+| `npm run preview` | serve that build locally |
+
+Two of the dashboard's inputs are written by `src/evaluate.py`: `reports/curves.json`
+(ROC and PR curve points) and `reports/test_probabilities.csv` (P(flood) per test
+image). Re-run `python src/evaluate.py` if either is missing.
+
+
 ## Setup (macOS, Apple Silicon)
 
 ```bash

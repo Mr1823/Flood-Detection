@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Colour roles. Defined once, here. No chart ever names a hex value - every
+   chart references a role, so a palette change happens in this file alone.
+
+   Dark mode is a deliberate SECOND SET of values chosen against the dark
+   surface, not an inversion of the light set. Both sets were checked with the
+   palette validator: all five categorical slots pass the lightness band,
+   chroma floor, CVD separation and normal-vision separation in both modes.
+   In light mode slots 3/4/5 sit below 3:1 against the surface, which is why a
+   "Show data" table is required on every chart section.
+--------------------------------------------------------------------------- */
+:root {
+  /* categorical - assigned in fixed order, never cycled */
+  --series-1: #2a78d6;  /* blue    */
+  --series-2: #eb6834;  /* orange  */
+  --series-3: #1baf7a;  /* aqua    */
+  --series-4: #eda100;  /* yellow  */
+  --series-5: #e87ba4;  /* magenta */
+
+  /* sequential - ONE hue, light to dark (confusion matrix only) */
+  --seq-1: #eaf2fc;
+  --seq-2: #c7ddf7;
+  --seq-3: #8dbcee;
+  --seq-4: #5199e2;
+  --seq-5: #2a78d6;
+  --seq-ink-light: #0b0b0b;   /* text on the pale steps */
+  --seq-ink-dark: #ffffff;    /* text on the deep steps */
+
+  /* status - reserved for verdicts, never used as a series colour */
+  --status-good: #1e7a4f;
+  --status-warning: #a86b00;
+  --status-critical: #b4342a;
+
+  /* surfaces */
+  --surface-page: #f4f4f2;
+  --surface-1: #fcfcfb;       /* the chart surface the palette was validated against */
+  --surface-2: #ffffff;
+
+  /* ink */
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #85837c;
+
+  /* chart furniture - recessive, behind the data */
+  --grid: #e6e5e1;
+  --axis: #cfcec9;
+  --border: #e2e1dc;
+  --reference: #9a9890;       /* chance lines, threshold rules */
+}
+
+:root[data-theme="dark"] {
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+
+  --seq-1: #16293f;
+  --seq-2: #1d3d5e;
+  --seq-3: #275a86;
+  --seq-4: #2f73ad;
+  --seq-5: #3987e5;
+  --seq-ink-light: #ffffff;
+  --seq-ink-dark: #ffffff;
+
+  --status-good: #4ec08a;
+  --status-warning: #e0a53a;
+  --status-critical: #e8705f;
+
+  --surface-page: #121211;
+  --surface-1: #1a1a19;
+  --surface-2: #222221;
+
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8f8e85;
+
+  --grid: #2e2e2c;
+  --axis: #3d3d3a;
+  --border: #302f2d;
+  --reference: #6f6e67;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Recharts draws its own surfaces; keep focus rings visible on our controls. */
+:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.recharts-surface {
+  overflow: visible;
+}
+
+/* Tabular figures keep columns of numbers aligned. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}

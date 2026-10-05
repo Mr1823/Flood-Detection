@@ -21,6 +21,8 @@ Outputs
   reports/results_dashboard.png        training curves, confusion matrix, ROC, PR
   reports/metrics.json                 every number (the README is filled from it)
   reports/false_negatives.csv          the floods the system would miss
+  reports/curves.json                  ROC and PR curve points (the web dashboard reads these)
+  reports/test_probabilities.csv       P(flood) for every test image, with its true class
 
     python src/evaluate.py
 """
@@ -93,6 +95,47 @@ def write_sweep(path, rows):
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
+
+
+def write_curves(labels, probs, roc_auc, average_precision, path):
+    """ROC and PR curves as plain point lists. The .png figures are not machine-readable,
+    so the same curves are saved as data for the web dashboard."""
+    from sklearn.metrics import precision_recall_curve, roc_curve
+
+    fpr, tpr, roc_thresholds = roc_curve(labels, probs)
+    precision, recall, pr_thresholds = precision_recall_curve(labels, probs)
+
+    def finite(value):
+        """roc_curve's first threshold is +inf; JSON.parse rejects Infinity, so send null."""
+        value = float(value)
+        return value if np.isfinite(value) else None
+
+    curves = {
+        "roc": [{"fpr": float(a), "tpr": float(b), "threshold": finite(t)}
+                for a, b, t in zip(fpr, tpr, roc_thresholds)],
+        "roc_auc": float(roc_auc),
+        # precision_recall_curve returns one more point than it has thresholds
+        "pr": [{"recall": float(r), "precision": float(p),
+                "threshold": finite(pr_thresholds[i]) if i < len(pr_thresholds) else None}
+               for i, (r, p) in enumerate(zip(recall, precision))],
+        "average_precision": float(average_precision),
+        "positive_share": float(labels.mean()),      # the PR chance baseline
+    }
+    with open(path, "w") as handle:
+        json.dump(curves, handle, indent=2)
+    return curves
+
+
+def write_probabilities(paths, labels, probs, path):
+    """P(flood) for every test image - the probability histogram is built from this."""
+    with open(path, "w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["file", "true_class", "p_flood"])
+        writer.writeheader()
+        for i in range(len(labels)):
+            writer.writerow({"file": config.rel(paths[i]),
+                             "true_class": config.CLASS_NAMES[labels[i]],
+                             "p_flood": round(float(probs[i]), 6)})
+    return len(labels)
 
 
 def print_confusion(title, matrix):
@@ -345,6 +388,10 @@ def main():
     ap = plot_single(draw_pr, test_labels, test_probs, test_at,
                      os.path.join(args.report_dir, "pr_curve.png"))
     print(f"ROC AUC: {roc_auc:.4f}   (average precision {ap:.4f})")
+    write_curves(test_labels, test_probs, roc_auc, ap, os.path.join(args.report_dir, "curves.json"))
+    n_probs = write_probabilities(test_paths, test_labels, test_probs,
+                                  os.path.join(args.report_dir, "test_probabilities.csv"))
+    print(f"Saved curves.json and test_probabilities.csv ({n_probs} test images).")
     plot_confusions(m_default, m_tuned, threshold, os.path.join(args.report_dir, "confusion_matrix.png"))
     n_wrong = plot_misclassified(test_paths, test_labels, test_probs, threshold,
                                  os.path.join(args.report_dir, "misclassified.png"))

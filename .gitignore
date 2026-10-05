@@ -89,6 +89,15 @@ mlruns/
 !reports/*.log
 !reports/**/*.log
 
+# ---- Node / the React dashboard ----
+node_modules/
+dashboard/dist/
+.vite/
+*.local
+npm-debug.log*
+# dashboard/public/data/dashboard.json IS tracked - it is the dashboard's whole input,
+# and it is small (77 KB). Regenerate it with: npm run data
+
 # ---- Streamlit / Gradio caches ----
 .streamlit/secrets.toml
 flagged/
