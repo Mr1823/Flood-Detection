@@ -3,8 +3,8 @@
 Binary image classification of **aerial images**: **flood** vs **no_flood**.
 MobileNetV2 with ImageNet weights is first trained as a frozen feature extractor
 and then fine-tuned. The project delivers a trained model, an evaluation report,
-Grad-CAM evidence for every decision, a Streamlit demo app and TFLite exports
-with measured size and speed.
+Grad-CAM evidence for every decision, a React dashboard with live prediction and
+TFLite exports with measured size and speed.
 
 Every result in this README comes from an actual run; each table names the file
 in `reports/` that holds its numbers. Nothing is estimated or typed in.
@@ -27,18 +27,18 @@ test accuracy 0.9649 ± 0.0044 at threshold 0.5 (`reports/seed_summary.json`).
 
 ## Results dashboard (React, localhost)
 
-A static, read-only analytics view over the numbers already in `reports/`. It runs no
-model - live prediction stays in the Streamlit app - so it only ever shows values the
-pipeline has already produced.
+The project's user interface, and a read-only analytics view over the numbers already
+in `reports/`. Five of its six tabs are static and only ever show values the pipeline
+has already produced; the **Predict** tab runs the model through a small local API.
 
 ```bash
-cd dashboard
+cd frontend
 npm install            # once
-npm run data           # regenerate dashboard/public/data/dashboard.json from reports/
+npm run data           # regenerate frontend/public/data/dashboard.json from reports/
 npm run dev            # http://localhost:5173
 ```
 
-`npm run data` runs `src/export_dashboard_data.py`, so refreshing the dashboard after a
+`npm run data` runs `backend/src/export_dashboard_data.py`, so refreshing the dashboard after a
 retrain is one command. The exporter fails loudly if a source report is missing and
 names the script that produces it.
 
@@ -49,14 +49,14 @@ exception: it uploads an image to a small local API that runs the deployed model
 returns the probability and a Grad-CAM overlay. Start it in a second terminal:
 
 ```bash
-cd dashboard
+cd frontend
 npm run api            # http://127.0.0.1:8000, proxied as /api by the dev server
 ```
 
-`src/serve_api.py` reuses `dataset.load_for_model`, `gradcam.explain` and
-`model.load_trained_model` - the same functions the Streamlit app and `evaluate.py`
-use - so a prediction in the dashboard and a prediction in Streamlit are the same
-computation. Checked against the saved pipeline values, the API agrees to 7e-07.
+`backend/src/serve_api.py` reuses `dataset.load_for_model`, `gradcam.explain` and
+`model.load_trained_model` - the same functions `evaluate.py` and `predict.py` use, so
+a prediction in the dashboard is the same computation as one in the pipeline. Checked
+against the saved pipeline values, the API agrees to 7e-07.
 
 The **Threshold** tab also has a slider that recomputes precision, recall, the
 confusion matrix, floods missed and false alarms from the saved per-image test
@@ -72,12 +72,12 @@ exact. The deployed threshold is unchanged by it.
 |---|---|
 | `npm run data` | rebuild `dashboard.json` from `reports/` |
 | `npm run dev` | dev server on http://localhost:5173 |
-| `npm run build` | production build into `dashboard/dist` |
+| `npm run build` | production build into `frontend/dist` |
 | `npm run preview` | serve that build locally |
 
-Two of the dashboard's inputs are written by `src/evaluate.py`: `reports/curves.json`
+Two of the dashboard's inputs are written by `backend/src/evaluate.py`: `reports/curves.json`
 (ROC and PR curve points) and `reports/test_probabilities.csv` (P(flood) per test
-image). Re-run `python src/evaluate.py` if either is missing.
+image). Re-run `python backend/src/evaluate.py` if either is missing.
 
 
 ## Setup (macOS, Apple Silicon)
@@ -86,7 +86,7 @@ image). Re-run `python src/evaluate.py` if either is missing.
 brew install python@3.11 python-tk@3.11
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt     # pinned, tested set - incl. protobuf==4.25.9, see below
+pip install -r backend/requirements.txt     # pinned, tested set - incl. protobuf==4.25.9, see below
 ```
 
 Every script prints the TensorFlow version and the devices it can see; `GPU`
@@ -100,6 +100,11 @@ Kyrkou, Zenodo 2020, DOI [10.5281/zenodo.3888300](https://doi.org/10.5281/zenodo
 licensed **CC BY 4.0** (use with attribution). Please also cite the two papers it
 accompanies: DOI 10.1109/JSTARS.2020.2969809 and DOI 10.1109/CVPRW.2019.00077.
 
+> The raw archive and its `aider_raw/` extract are **not kept in this repo** - only the
+> finished splits in `data/` are. Run the download below before re-running
+> `split_data.py` or auditing the source dataset; everything else (training,
+> evaluation, Grad-CAM, export, the app and the dashboard) works from `data/` alone.
+
 ```bash
 curl -L -C - -o AIDER.zip "https://zenodo.org/records/3888300/files/AIDER.zip?download=1"
 md5 AIDER.zip                        # must print 1ad4eb02ed156e8dfa19986ff382e58b
@@ -110,7 +115,7 @@ Zenodo throttles each connection (about 35 KB/s was observed), so the 263 MB
 download can take two hours; `-C -` resumes an interrupted download.
 
 Only two AIDER classes are used: `flooded_areas` (526 images) → **flood** and
-`normal` (4,390 images) → **no_flood**. `src/split_data.py` then:
+`normal` (4,390 images) → **no_flood**. `backend/src/split_data.py` then:
 
 1. skips files that cannot be used — here one all-black video frame;
 2. removes duplicates over the **whole** pool, before any subsampling: 0 exact
@@ -132,26 +137,24 @@ left out. Training uses class weights 0.763 (no_flood) and 1.451 (flood).
 ## Running, in order
 
 ```bash
-python src/audit_dataset.py --source --balance   # 1. audit AIDER for shortcuts -> reports/audit_aider.md
-python src/split_data.py                          # 2. de-duplicate, subsample, split; audits the split
-python src/dataset.py                             # 3. shapes, label mapping, reports/sample_batch.png
-python src/train.py                               # 4. both variants x 3 seeds (~15 min on an M4)
-python src/evaluate.py                            # 5. threshold chosen on validation, test report
-python src/gradcam.py                             # 6. Grad-CAM grid, attention + deletion test
-python src/export.py                              # 7. .keras + TFLite exports, sizes and latencies
-python src/predict.py path/to/image_or_folder     # command-line predictions
-streamlit run app.py                              # the demo app (opens in the browser)
+python backend/src/audit_dataset.py --source --balance   # 1. audit AIDER for shortcuts -> reports/audit_aider.md
+python backend/src/split_data.py                          # 2. de-duplicate, subsample, split; audits the split
+python backend/src/dataset.py                             # 3. shapes, label mapping, sanity-check batch
+python backend/src/train.py                               # 4. both variants x 3 seeds (~15 min on an M4)
+python backend/src/evaluate.py                            # 5. threshold chosen on validation, test report
+python backend/src/gradcam.py                             # 6. Grad-CAM grid, attention + deletion test
+python backend/src/export.py                              # 7. .keras + TFLite exports, sizes and latencies
+python backend/src/predict.py path/to/image_or_folder     # command-line predictions
 ```
 
 Every script has `--help`; paths and the main hyperparameters can be overridden,
-and every constant lives in `src/config.py`.
+and every constant lives in `backend/src/config.py`.
 
-**The app** (`streamlit run app.py`): upload an image to see it next to its
-Grad-CAM evidence, the verdict, the flood probability, the decision threshold and
-the attention area. The sidebar slider starts at the tuned threshold and shows
-the validation precision and recall live as it moves; the Batch tab classifies
-several images and downloads the results as CSV. Unreadable files are reported,
-not crashed on.
+**The app** is the React dashboard (see *Results dashboard* above). Its **Predict**
+tab takes an image and shows it next to its Grad-CAM evidence, the verdict, the flood
+probability, the decision threshold and the attention area. Its **Threshold** tab has
+a slider that starts at the tuned threshold and recomputes precision, recall and the
+confusion matrix live as it moves. Unreadable files are reported, not crashed on.
 
 ## Method
 
@@ -211,7 +214,8 @@ still ≥ 0.85, which maximises recall under that floor — a missed flood costs
 lives, a false alarm costs an inspection. It selected **0.30** (validation
 precision 0.859, recall 1.000). Both sweeps are saved:
 `reports/threshold_sweep_val.csv` (used to choose) and
-`reports/threshold_sweep_test.csv` (reported only); `reports/threshold_sweep.png`.
+`reports/threshold_sweep_test.csv` (reported only). The dashboard's **Threshold**
+tab draws both.
 
 | Confusion matrix, test (rows = actual, columns = predicted) | pred. no_flood | pred. flood |
 |---|---|---|
@@ -228,8 +232,8 @@ precision 0.859, recall 1.000). Both sweeps are saved:
 | Accuracy | 0.961 | 0.943 |
 | Specificity | 0.947 | 0.920 |
 
-ROC AUC 0.9955, average precision 0.9932 (`reports/roc_curve.png`,
-`reports/pr_curve.png`, `reports/results_dashboard.png`).
+ROC AUC 0.9955, average precision 0.9932 (`reports/curves.json`; the dashboard's
+**Performance** tab draws both curves).
 
 **A note on the threshold rule.** On validation, recall is 1.000 at every swept
 threshold from 0.05 to 0.45, so "lowest threshold" gives up precision there for
@@ -247,12 +251,12 @@ views, while straight-down urban views appear mostly among the no_flood images,
 so this miss is consistent with the viewpoint and source differences the
 dataset audit measured.
 
-**False alarms** (`reports/misclassified.png`, 12 at threshold 0.30) are mostly
+**False alarms** (12 at threshold 0.30, `reports/metrics.json`) are mostly
 open water (a turquoise sea with swimmers), brown earth or mud (a motocross
 track, a beach, a muddy field) and vehicles on roads: water and mud colours act
 as flood evidence even when there is no flood.
 
-## Grad-CAM evidence (`reports/gradcam_stats.json`, `reports/gradcam_grid.png`)
+## Grad-CAM evidence (`reports/gradcam_stats.json`)
 
 Grad-CAM on `Conv_1` (7×7 feature maps), computed from the logit before the
 sigmoid (the same map up to scale, but immune to the sigmoid saturating at
@@ -312,7 +316,7 @@ compare deployment options, not file formats alone.)
 
 ## Dataset validation
 
-Before training on any dataset, `src/audit_dataset.py` checks whether something
+Before training on any dataset, `backend/src/audit_dataset.py` checks whether something
 other than flood water separates the two classes. A CNN learns such a shortcut
 more easily than the content, and the test score then measures the shortcut.
 Its key test trains a random forest on three statistics that say nothing about
@@ -417,11 +421,11 @@ These were found and measured while building the project.
   Epochs also became faster (9 s instead of 12 s).
 - **Keras 3 exported the model with augmentation switched on.** `model.export()`
   traced the call with the training flag left at its default, so the exported
-  graph randomly rotated and re-brightened every image. `src/export.py` exports an
+  graph randomly rotated and re-brightened every image. `backend/src/export.py` exports an
   explicit `training=False` endpoint instead.
-- **Streamlit would break TensorFlow.** A plain `pip install streamlit` upgrades
-  protobuf to 7.x, which TensorFlow 2.16 cannot import; `requirements.txt` pins
-  `protobuf==4.25.9`.
+- **Protobuf has to be pinned.** TensorFlow 2.16 cannot import protobuf 5.x or
+  newer, and several web packages will happily upgrade it as a transitive
+  dependency; `requirements.txt` pins `protobuf==4.25.9`.
 - **Integer random draws fail on the Metal GPU**, so the random crop draws floats
   in [0, 1) and scales them.
 
